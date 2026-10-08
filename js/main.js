@@ -2,7 +2,7 @@
 let asientosDisponibles = 4;
 let precioBase = 150.0;
 let sistemaActivo = true;
-
+const RECARGO_EXCESO = 50.0;   
 
 alert("=== SISTEMA INTERACTIVO DE RESERVA DE VUELOS ===");
 
@@ -32,28 +32,27 @@ while (sistemaActivo) {
         let cantidadPasajerosTexto = prompt(`Vuelo ${codigoVuelo} (Asientos disponibles: ${asientosDisponibles})\n¿Cuántos pasajeros desea registrar en este grupo?`);
         let cantidadPasajeros = Number(cantidadPasajerosTexto);
 
-        if (asientosDisponibles > cantidadPasajeros) {
+        if (asientosDisponibles >= cantidadPasajeros) {
             let totalReserva = 0;
             let pasajerosConfirmados = 0;
             
             // --- CICLO FOR: Procesa uno a uno cada pasajero del grupo ---
             for (let i = 1; i <= cantidadPasajeros; i++) {
-        
                 // CONDICIONAL ANIDADO: Verificar disponibilidad antes de registrar
                 if (asientosDisponibles > 0) {
-
                     // Solicitar datos individuales por prompt
                     let nombrePasajero = prompt(`Pasajero ${i} de ${cantidadPasajeros}:\nIngrese el nombre y apellido:`);
                     let pesoMaletaTexto = prompt(`Ingrese el peso del equipaje (en kg) para ${nombrePasajero}:`);
                     let pesoMaleta = Number(pesoMaletaTexto);
+                    let recargo = 0;                       // se reinicia en cada pasajero
+                    let costoPasaje = precioBase;          // se reinicia en cada pasajero
 
                     // CONDICIONAL: Aplicar recargo por exceso de peso
                     if (pesoMaleta > 23.0) {
-                        costoPasaje += recargo;
+                        recargo = RECARGO_EXCESO;
+                        costoPasaje = precioBase + recargo;
                         alert(`Pasajero: ${nombrePasajero}\nEquipaje: ${pesoMaleta}kg (Supera los 23kg)\nCosto Boleto: $${precioBase} + Recargo $${recargo} = $${costoPasaje}`);
                     } else {
-                        costoPasaje = precioBase;
-                        recargo = 0;
                         alert(`Pasajero: ${nombrePasajero}\nEquipaje: ${pesoMaleta}kg (Correcto)\nCosto Boleto: $${precioBase}`);
                     }
 
@@ -62,9 +61,9 @@ while (sistemaActivo) {
                     pasajerosConfirmados++;
                     console.log("--- Registro de Pasaje ---");
                     console.log("Nombre del pasajero:", nombrePasajero);
-                    console.log("Peso de equipaje (Number):", pesoMaletaTexto);
-                    console.log("Recargo por peso maleta (Number):", recargo);
-                    console.log("Precio del pasaje:", costoPasaje);
+                    console.log("Peso de equipaje :", pesoMaletaTexto);
+                    console.log("Recargo por peso maleta: $ ", recargo);
+                    console.log("Precio del pasaje: $ ", costoPasaje);
                 } 
             }
             // Resumen final de la transacción
